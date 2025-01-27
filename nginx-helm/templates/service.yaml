@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Release.Name }}"
-  namespace: "{{ .Values.namespace }}"
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
   labels:
-    app: "{{ .Chart.Name }}"
+    app: {{ .Chart.Name }}
 spec:
-  type: "{{ .Values.service.type }}"
+  type: {{ .Values.service.type }}
   ports:
-    - port: "{{ .Values.service.port  | int }}"
-      targetPort: "{{ .Values.service.targetPort | int }}"
+    - port: {{ .Values.service.port  | int }}
+      targetPort: {{ .Values.service.targetPort | int }}
   selector:
-    app: "{{ .Chart.Name }}"
+    app: {{ .Chart.Name }}
