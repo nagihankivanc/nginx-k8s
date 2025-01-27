@@ -1,0 +1,6 @@
+releases:
+  - name: nginx
+    namespace: argocd
+    chart: ./nginx-helm
+    values:
+      - ./nginx-helm/vars/values.yaml
