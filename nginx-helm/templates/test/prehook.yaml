@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: validate-yaml
-          image: ghcr.io/instrumenta/kubeval:latest
+          image: garethr/kubeval:latest
           command:
             - sh
             - -c
