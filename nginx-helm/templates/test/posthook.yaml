@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-posthook-test
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: nginx-test
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              echo Testing Nginx endpoint...
+              curl -s -o /dev/null -w %{http_code} http://{{ .Release.Name }}:80 | grep 200
+              if [ $? -eq 0 ]; then
+                echo Test succeeded!
+                exit 0
+              else
+                echo Test failed!
+                exit 1
+              fi
+      restartPolicy: Never

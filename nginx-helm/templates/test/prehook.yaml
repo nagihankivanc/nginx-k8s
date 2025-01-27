@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-prehook-validate
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: validate-yaml
+          image: ghcr.io/instrumenta/kubeval:latest
+          command:
+            - sh
+            - -c
+            - |
+              echo Validating Helm templates with kubeval...
+              helm template {{ .Release.Name }} /path/to/chart | kubeval --strict
+              if [ $? -eq 0 ]; then
+                echo Validation passed!
+                exit 0
+              else
+                echo Validation failed!
+                exit 1
+              fi
+      restartPolicy: Never
