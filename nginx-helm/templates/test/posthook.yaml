@@ -17,13 +17,18 @@ spec:
             - sh
             - -c
             - |
-              echo Testing Nginx endpoint...
-              curl -s -o /dev/null -w %{http_code} http://{{ .Release.Name }}:80 | grep 200
+              echo "Waiting for service to be ready..."
+              until curl -s http://{{ .Release.Name }}.{{ .Values.namespace }}.svc.cluster.local:80; do
+                echo "Still waiting..."
+                sleep 5
+              done
+              echo "Service is ready. Running tests..."
+              curl -s -o /dev/null -w %{http_code} http://{{ .Release.Name }}.{{ .Values.namespace }}.svc.cluster.local:80 | grep 200
               if [ $? -eq 0 ]; then
-                echo Test succeeded!
+                echo "Test succeeded!"
                 exit 0
               else
-                echo Test failed!
+                echo "Test failed!"
                 exit 1
               fi
       restartPolicy: Never
