@@ -22,18 +22,13 @@ spec:
             - sh
             - -c
             - |
-              echo "Getting NodePort and NodeIP..."
-              NODE_PORT=$(kubectl get service {{ .Release.Name }} -n {{ .Values.namespace }} -o jsonpath='{.spec.ports[0].nodePort}')
-              echo "NodePort is $NODE_PORT"
-              echo "NodeIP is $NODE_IP"
-
-              echo "Waiting for service to be ready on NodeIP $NODE_IP and NodePort $NODE_PORT..."
-              until curl -s http://$NODE_IP:$NODE_PORT; do
+              echo "Waiting for service to be ready on NodeIP $NODE_IP..."
+              until curl -s http://$NODE_IP:30080; do
                 echo "Still waiting..."
                 sleep 5
               done
               echo "Service is ready. Running tests..."
-              curl -s -o /dev/null -w %{http_code} http://$NODE_IP:$NODE_PORT | grep 200
+              curl -s -o /dev/null -w %{http_code} http://$NODE_IP:30080 | grep 200
               if [ $? -eq 0 ]; then
                 echo "Test succeeded!"
                 exit 0
