@@ -8,8 +8,8 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
-  template:
   ttlSecondsAfterFinished: 300
+  template:
     spec:
       containers:
         - name: validate-yaml
