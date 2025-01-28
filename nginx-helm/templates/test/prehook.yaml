@@ -9,6 +9,7 @@ metadata:
     app: {{ .Release.Name }}
 spec:
   template:
+  ttlSecondsAfterFinished: 300
     spec:
       containers:
         - name: validate-yaml

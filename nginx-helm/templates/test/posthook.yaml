@@ -9,10 +9,11 @@ metadata:
     app: {{ .Release.Name }}
 spec:
   template:
+  ttlSecondsAfterFinished: 300
     spec:
       containers:
         - name: nginx-test
-          image: curlimages/curl:latest
+          image: curlimages/curl
           command:
             - sh
             - -c
