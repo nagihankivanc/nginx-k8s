@@ -13,22 +13,17 @@ spec:
       containers:
         - name: nginx-test
           image: curlimages/curl:latest
-          env:
-            - name: NODE_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP 
           command:
             - sh
             - -c
             - |
-              echo "Waiting for service to be ready on NodeIP $NODE_IP..."
-              until curl -s http://$NODE_IP:30080; do
+              echo "Waiting for nginx service to be ready..."
+              until curl -s http://{{ .Release.Name }}:80; do
                 echo "Still waiting..."
                 sleep 5
               done
-              echo "Service is ready. Running tests..."
-              curl -s -o /dev/null -w %{http_code} http://$NODE_IP:30080 | grep 200
+              echo "Nginx service is ready. Running tests..."
+              curl -s -o /dev/null -w %{http_code} http://{{ .Release.Name }}:80 | grep 200
               if [ $? -eq 0 ]; then
                 echo "Test succeeded!"
                 exit 0

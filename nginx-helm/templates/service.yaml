@@ -10,6 +10,5 @@ spec:
   ports:
     - port: {{ .Values.service.port  | int }}
       targetPort: {{ .Values.service.targetPort | int }}
-      nodePort: 30080
   selector:
     app: {{ .Chart.Name }}
