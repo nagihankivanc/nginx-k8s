@@ -20,3 +20,17 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: {{ .Values.service.port | int }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port | int }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port | int }}
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            failureThreshold: 5
