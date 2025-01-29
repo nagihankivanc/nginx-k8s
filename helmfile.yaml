@@ -1,6 +1,11 @@
+repositories:
+  - name: my-helm-charts
+    url: https://github.com/nagihankivanc/helm-charts.git 
+
 releases:
   - name: nginx
-    namespace: argocd
-    chart: ./nginx-helm
+    namespace: nginx-test
+    chart: my-helm-charts/nginx  
+    version: 0.1.0 
     values:
       - ./nginx-helm/vars/values.yaml

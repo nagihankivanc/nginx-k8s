@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/nagihankivanc/nginx-k8s.git
+        revision: HEAD
+        files:
+          - path: argocd/apps/*.yaml 
+  template:
+    metadata:
+      name: '{{ app_name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/nagihankivanc/helm-charts.git  
+        targetRevision: '{{ chart_version }}'  
+        chart: '{{ chart_name }}' 
+        helm:
+          values: |
+            {{ values_content | toYaml | nindent 12 }}
+      destination:
+        server: https://kubernetes.default.svc.cluster.local
+        namespace: '{{ namespace }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

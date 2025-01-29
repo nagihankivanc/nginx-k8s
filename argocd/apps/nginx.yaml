@@ -1,0 +1,9 @@
+app_name: nginx
+chart_name: nginx
+chart_version: 0.1.0
+namespace: nginx-test
+values_content:
+  replicaCount: 1
+  image:
+    repository: nginx
+    tag: "1.25.0"
